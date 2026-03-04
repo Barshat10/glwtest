@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GLW – Testseite</title>
+  <meta name="description" content="Testseite zur Integration des Help-Chatbots." />
+
+  <link rel="icon" href="favicon.ico" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <div class="brand">
+        <div class="brand__logo">GLW</div>
+        <div class="brand__text">
+          <div class="brand__name">GLW</div>
+          <div class="brand__tagline">Kabelverarbeitung · Made in Germany</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="#produkte">Produkte</a>
+        <a href="#services">Services</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero__inner">
+        <div>
+          <h1>Testseite für den Help-Chatbot</h1>
+          <p>
+            Diese Seite simuliert eine einfache Unternehmens-Website, damit du den Chatbot in Ruhe testen kannst
+            (Layout, Mobile, z-index, Performance, etc.).
+          </p>
+
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="#kontakt">Kontakt</a>
+            <a class="btn btn--ghost" href="#services">Mehr erfahren</a>
+          </div>
+
+          <div class="info-cards">
+            <div class="card">
+              <h3>Schnelltest</h3>
+              <p>Widget öffnen/schließen, Position, Responsiveness.</p>
+            </div>
+            <div class="card">
+              <h3>Edge Cases</h3>
+              <p>Offline / langsames Netz / lange Nachrichten / Resize.</p>
+            </div>
+            <div class="card">
+              <h3>Integration</h3>
+              <p>Genau derselbe Embed wie später auf der echten Seite (nur Test-Setup).</p>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero__aside">
+          <div class="panel">
+            <h2>Support</h2>
+            <p>Stelle typische Fragen, die Kunden stellen würden:</p>
+            <ul>
+              <li>„Welche Maschine passt für …?“</li>
+              <li>„Wie ist die Lieferzeit?“</li>
+              <li>„Wie erreiche ich den Service?“</li>
+            </ul>
+
+            <div class="note">
+              Tipp: teste auch mobile! (DevTools → Toggle device toolbar)
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="produkte" class="section">
+      <div class="container">
+        <h2>Produkte</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Maschine A</h3>
+            <p>Kurzbeschreibung für realistische Seite.</p>
+          </div>
+          <div class="card">
+            <h3>Maschine B</h3>
+            <p>Kurzbeschreibung für realistische Seite.</p>
+          </div>
+          <div class="card">
+            <h3>Werkzeug C</h3>
+            <p>Kurzbeschreibung für realistische Seite.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="section section--alt">
+      <div class="container">
+        <h2>Services</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Inbetriebnahme</h3>
+            <p>On-site / Remote Support, Schulungen.</p>
+          </div>
+          <div class="card">
+            <h3>Wartung</h3>
+            <p>Wartungspläne, Ersatzteile, Diagnosen.</p>
+          </div>
+          <div class="card">
+            <h3>Beratung</h3>
+            <p>Welche Lösung passt zu welchem Kabeltyp?</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="kontakt" class="section">
+      <div class="container">
+        <h2>Kontakt</h2>
+        <form class="form" onsubmit="return false;">
+          <label>
+            Name
+            <input type="text" placeholder="Max Mustermann" />
+          </label>
+          <label>
+            E-Mail
+            <input type="email" placeholder="max@example.com" />
+          </label>
+          <label>
+            Nachricht
+            <textarea rows="4" placeholder="Wie können wir helfen?"></textarea>
+          </label>
+          <button class="btn btn--primary" type="submit" id="fakeSubmit">Senden (Demo)</button>
+          <p class="form__hint">Formular ist nur Demo — ideal zum Testen von Overlays/z-index.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>© <span id="year"></span> GLW – Testseite</div>
+      <div class="footer__links">
+        <a href="#">Impressum</a>
+        <a href="#">Datenschutz</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+
+  <!-- ✅ Chatbot launcher (shows only a button until clicked) -->
+  <button id="glw-chat-launcher" aria-label="Open help chat">💬</button>
+
+  <script>
+    (function () {
+      const BTN_ID = "glw-chat-launcher";
+      const IFRAME_ID = "glw-chat-iframe";
+
+      const btn = document.getElementById(BTN_ID);
+
+      // Style the floating button
+      Object.assign(btn.style, {
+        position: "fixed",
+        right: "22px",
+        bottom: "22px",
+        width: "56px",
+        height: "56px",
+        borderRadius: "999px",
+        border: "none",
+        cursor: "pointer",
+        zIndex: "999999",
+        color: "#fff",
+        fontSize: "20px",
+        lineHeight: "1",
+        boxShadow: "0 18px 50px rgba(2,6,23,.18)",
+        background: "linear-gradient(135deg, #bc1c53, #d62b67)",
+      });
+
+      function openChat() {
+        const iframe = document.createElement("iframe");
+        iframe.id = IFRAME_ID;
+        iframe.src = "/widget.html";
+        iframe.title = "GLW Help Bot";
+        iframe.setAttribute("allow", "clipboard-read; clipboard-write");
+
+        const isMobile = window.matchMedia("(max-width: 520px)").matches;
+
+        Object.assign(iframe.style, {
+          position: "fixed",
+          right: "22px",
+          bottom: "90px",
+          width: isMobile ? "calc(100vw - 24px)" : "392px",
+          height: isMobile ? "70vh" : "568px",
+          maxWidth: "calc(100vw - 44px)",
+          maxHeight: "calc(100vh - 130px)",
+          border: "0",
+          borderRadius: "20px",
+          zIndex: "999999",
+          background: "transparent",
+          boxShadow: "0 18px 50px rgba(2,6,23,.18)",
+
+          /* ✅ IMPORTANT: prevent blank/grey panel while iframe loads */
+          opacity: "0",
+          transition: "opacity 180ms ease",
+          pointerEvents: "none",
+        });
+
+        if (isMobile) {
+          iframe.style.right = "12px";
+          iframe.style.bottom = "84px";
+        }
+
+        iframe.onload = () => {
+          iframe.style.opacity = "1";
+          iframe.style.pointerEvents = "auto";
+        };
+
+        document.body.appendChild(iframe);
+
+        btn.textContent = "✕";
+        btn.setAttribute("aria-label", "Close help chat");
+      }
+
+      function closeChat() {
+        const iframe = document.getElementById(IFRAME_ID);
+        if (iframe) iframe.remove();
+        btn.textContent = "💬";
+        btn.setAttribute("aria-label", "Open help chat");
+      }
+
+      function toggleChat() {
+        const iframe = document.getElementById(IFRAME_ID);
+        if (iframe) closeChat();
+        else openChat();
+      }
+
+      btn.addEventListener("click", toggleChat);
+
+      // Optional: close when ESC pressed
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeChat();
+      });
+    })();
+  </script>
+</body>
+</html>
