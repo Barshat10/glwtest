@@ -182,9 +182,14 @@
       });
 
       function openChat() {
+        // Create iframe only when opened
         const iframe = document.createElement("iframe");
         iframe.id = IFRAME_ID;
-        iframe.src = "/widget.html";
+
+        // ✅ IMPORTANT for GitHub Pages project sites:
+        // Use a relative path so it works at /glwtest/ (and locally).
+        iframe.src = "./widget.html";
+
         iframe.title = "GLW Help Bot";
         iframe.setAttribute("allow", "clipboard-read; clipboard-write");
 
@@ -204,7 +209,7 @@
           background: "transparent",
           boxShadow: "0 18px 50px rgba(2,6,23,.18)",
 
-          /* ✅ IMPORTANT: prevent blank/grey panel while iframe loads */
+          /* ✅ prevent blank/grey panel while iframe loads */
           opacity: "0",
           transition: "opacity 180ms ease",
           pointerEvents: "none",
