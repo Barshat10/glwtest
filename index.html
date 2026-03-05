@@ -153,13 +153,14 @@
 
   <script src="app.js"></script>
 
-  <!-- ✅ Chatbot launcher (shows only a button until clicked) -->
+  <!-- ✅ Chatbot launcher -->
   <button id="glw-chat-launcher" aria-label="Open help chat">💬</button>
 
   <script>
     (function () {
       const BTN_ID = "glw-chat-launcher";
       const IFRAME_ID = "glw-chat-iframe";
+      const STORAGE_KEY = "GLW_API_BASE";
 
       const btn = document.getElementById(BTN_ID);
 
@@ -181,15 +182,51 @@
         background: "linear-gradient(135deg, #bc1c53, #d62b67)",
       });
 
-      function openChat() {
-        // Create iframe only when opened
-        const iframe = document.createElement("iframe");
-        iframe.id = IFRAME_ID;
+      function normalizeBaseUrl(u) {
+        return String(u || "").trim().replace(/\/+$/, "");
+      }
 
+      // ✅ Read tunnel URL from:
+      // 1) ?api=https://xxxxx.trycloudflare.com   (sets localStorage)
+      // 2) localStorage (persists across reloads)
+      // 3) fallback local FastAPI
+      function getApiBase() {
+        const params = new URLSearchParams(window.location.search);
+        const apiFromUrl = params.get("api");
+        if (apiFromUrl) {
+          const base = normalizeBaseUrl(apiFromUrl);
+          if (base) localStorage.setItem(STORAGE_KEY, base);
+          return base;
+        }
+
+        const saved = normalizeBaseUrl(localStorage.getItem(STORAGE_KEY));
+        if (saved) return saved;
+
+        return "http://127.0.0.1:8000";
+      }
+
+      const apiBase = getApiBase();
+
+      // Optional helper: show current API base in console
+      console.log("[GLW HelpBot] API base:", apiBase);
+
+      function buildWidgetSrc() {
         // ✅ IMPORTANT for GitHub Pages project sites:
         // Use a relative path so it works at /glwtest/ (and locally).
-        iframe.src = "./widget.html";
+        //
+        // Pass apiBase to widget only if it's not local,
+        // so local dev keeps a clean URL.
+        const base = normalizeBaseUrl(apiBase);
+        const isLocal = base.startsWith("http://127.0.0.1") || base.startsWith("http://localhost");
 
+        if (isLocal) return "./widget.html";
+        return "./widget.html?api=" + encodeURIComponent(base);
+      }
+
+      function openChat() {
+        const iframe = document.createElement("iframe");
+        iframe.id = IFRAME_ID;
+        iframe.src = buildWidgetSrc();
         iframe.title = "GLW Help Bot";
         iframe.setAttribute("allow", "clipboard-read; clipboard-write");
 
@@ -208,8 +245,6 @@
           zIndex: "999999",
           background: "transparent",
           boxShadow: "0 18px 50px rgba(2,6,23,.18)",
-
-          /* ✅ prevent blank/grey panel while iframe loads */
           opacity: "0",
           transition: "opacity 180ms ease",
           pointerEvents: "none",
@@ -250,6 +285,17 @@
       window.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeChat();
       });
+
+      /******************************************************************
+       * ✅ How you use it (no code changes, no GitHub upload each time):
+       *
+       * When Cloudflare prints a new tunnel URL, open your site ONCE like:
+       * https://barshat10.github.io/glwtest/?api=https://xxxxx.trycloudflare.com
+       *
+       * This saves it in localStorage.
+       * After that, normal loads work:
+       * https://barshat10.github.io/glwtest/
+       ******************************************************************/
     })();
   </script>
 </body>

@@ -14,15 +14,10 @@
       --muted:#64748b;
       --line:rgba(15,23,42,.12);
 
-      --bg:#d1d6d3;
       --card:#ffffff;
-
       --shadow: 0 18px 50px rgba(2,6,23,.18);
-      --shadow-soft: 0 10px 30px rgba(2,6,23,.10);
 
-      --r16:16px;
       --r20:20px;
-
       --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans";
 
       --user:#eef2ff;
@@ -37,35 +32,22 @@
       font-family: var(--font);
       margin:0;
       height:100vh;
-      background: transparent; /* ✅ IMPORTANT: iframe doesn't block website */
+      background: transparent; /* iframe safe */
       color: var(--ink);
     }
 
-    /* ❌ Floating button removed (no .fab in this version) */
-
-    /* ✅ Window: make it fill the iframe (not fixed on page) */
+    /* Window fills the iframe */
     .win{
-      position: relative;        /* changed */
-      right: auto;
-      bottom: auto;
-
+      position: relative;
       width: 100%;
       height: 100%;
-      max-width: none;
-      max-height: none;
-
       background: var(--card);
       border-radius: var(--r20);
       box-shadow: var(--shadow);
       overflow:hidden;
       border: 1px solid var(--line);
-
-      opacity: 1;               /* changed */
-      transform: none;          /* changed */
-      pointer-events: auto;     /* changed */
     }
 
-    /* Header */
     .header{
       height:64px;
       background:
@@ -77,12 +59,14 @@
       padding: 10px 12px 10px 14px;
       border-bottom: 1px solid var(--line);
     }
+
     .title{
       display:flex;
       align-items:center;
       gap:12px;
       min-width:0;
     }
+
     .badge{
       width:36px;height:36px;
       border-radius: 14px;
@@ -98,12 +82,14 @@
       user-select:none;
       box-shadow: 0 10px 24px rgba(188,28,83,.22);
     }
+
     .titleText{
       display:flex;
       flex-direction:column;
       min-width:0;
       line-height:1.05;
     }
+
     .titleText .name{
       font-weight: 900;
       font-size: 14px;
@@ -111,6 +97,7 @@
       overflow:hidden;
       text-overflow: ellipsis;
     }
+
     .titleText .sub{
       font-size: 12px;
       color: var(--muted);
@@ -125,6 +112,7 @@
       align-items:center;
       gap: 4px;
     }
+
     .iconbtn{
       border:none;
       background: transparent;
@@ -137,7 +125,6 @@
     }
     .iconbtn:hover{ background: rgba(15,23,42,.06); }
 
-    /* Body */
     .body{
       height: calc(100% - 64px - 76px);
       overflow:auto;
@@ -170,7 +157,6 @@
       border-bottom-left-radius: 8px;
     }
 
-    /* Quick chips (only in first message) */
     .quickRow{
       display:flex;
       gap:8px;
@@ -205,7 +191,6 @@
       margin: 8px 0;
     }
 
-    /* Sources: compact collapsible */
     .sourcesToggle{
       margin: -2px 0 10px 6px;
       font-size: 12px;
@@ -259,7 +244,6 @@
       font-size: 11px;
     }
 
-    /* Footer */
     .footer{
       height:76px;
       display:flex;
@@ -268,6 +252,7 @@
       border-top: 1px solid var(--line);
       background:#fff;
     }
+
     .input{
       flex:1;
       border-radius: 14px;
@@ -280,6 +265,7 @@
       border-color: rgba(188,28,83,.42);
       box-shadow: 0 0 0 4px rgba(188,28,83,.12);
     }
+
     .send{
       width:48px;height:48px;
       border-radius: 14px;
@@ -305,20 +291,16 @@
 </head>
 
 <body>
-  <!-- ❌ Removed fab button here -->
-
-  <!-- ✅ Window is always visible inside iframe -->
   <div class="win" id="window" role="dialog" aria-label="GLW Help Bot">
     <div class="header">
       <div class="title">
         <div class="badge">GLW</div>
         <div class="titleText">
           <div class="name">Help Bot</div>
-          <div class="sub">FAQ • Products • Troubleshooting</div>
+          <div class="sub" id="apiHint">FAQ • Products • Troubleshooting</div>
         </div>
       </div>
       <div class="actions">
-        <!-- keep buttons visually, but they just close the iframe window content -->
         <button class="iconbtn" id="minBtn" title="Minimize">—</button>
         <button class="iconbtn" id="closeBtn" title="Close">✕</button>
       </div>
@@ -333,9 +315,44 @@
   </div>
 
   <script>
-    //const API_URL = "https://adjustments-antiques-exceed-obligation.trycloudflare.com/chat";
-    const API_URL = " https://proposals-collector-spare-henderson.trycloudflare.com/chat";
+    /**********************************************************************
+     * ✅ NO MORE HARDCODED TUNNEL URL
+     *
+     * How to use for quick Cloudflare tunnels:
+     * 1) Start your tunnel, copy the https://xxxxx.trycloudflare.com
+     * 2) Open ONCE:
+     *    https://barshat10.github.io/glwtest/widget.html?api=https://xxxxx.trycloudflare.com
+     * 3) It will be saved in your browser (localStorage) and reused next time.
+     *
+     * To change it later, open again with ?api=NEW_URL
+     **********************************************************************/
 
+    function normalizeBaseUrl(u) {
+      return String(u || "").trim().replace(/\/+$/, "");
+    }
+
+    function getApiBase() {
+      // 1) URL param: ?api=https://xxxxx.trycloudflare.com
+      const params = new URLSearchParams(window.location.search);
+      const apiFromUrl = params.get("api");
+      if (apiFromUrl) {
+        const base = normalizeBaseUrl(apiFromUrl);
+        if (base) localStorage.setItem("GLW_API_BASE", base);
+        return base;
+      }
+
+      // 2) saved value
+      const saved = normalizeBaseUrl(localStorage.getItem("GLW_API_BASE"));
+      if (saved) return saved;
+
+      // 3) fallback for local testing
+      return "http://127.0.0.1:8000";
+    }
+
+    const API_BASE = getApiBase();
+    const API_URL  = `${API_BASE}/chat`;
+
+    // UI refs
     const win = document.getElementById("window");
     const closeBtn = document.getElementById("closeBtn");
     const minBtn = document.getElementById("minBtn");
@@ -343,6 +360,15 @@
     const input = document.getElementById("input");
     const send = document.getElementById("send");
     const messages = document.getElementById("messages");
+    const apiHint = document.getElementById("apiHint");
+
+    // Show which API it's using (handy for debugging)
+    try {
+      const u = new URL(API_BASE);
+      apiHint.textContent = `Connected to: ${u.host}`;
+    } catch {
+      apiHint.textContent = `Connected to: ${API_BASE}`;
+    }
 
     // Stable session id
     let sessionId = localStorage.getItem("glw_helpbot_session_id");
@@ -355,12 +381,16 @@
 
     let typingEl = null;
 
+    function scrollToBottom() {
+      messages.scrollTop = messages.scrollHeight;
+    }
+
     function addMessage(text, who) {
       const div = document.createElement("div");
       div.className = "msg " + who;
       div.textContent = text;
       messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
+      scrollToBottom();
       return div;
     }
 
@@ -370,7 +400,7 @@
       typingEl.className = "typing";
       typingEl.textContent = "Thinking…";
       messages.appendChild(typingEl);
-      messages.scrollTop = messages.scrollHeight;
+      scrollToBottom();
     }
 
     function hideTyping() {
@@ -415,6 +445,9 @@
       box.className = "sourcesBox";
 
       top.forEach((s, idx) => {
+        // If backend doesn't provide URL, skip link creation
+        if (!s || !s.url) return;
+
         const a = document.createElement("a");
         a.className = "sourceLink";
         a.href = s.url;
@@ -424,15 +457,17 @@
         box.appendChild(a);
       });
 
+      if (!box.childElementCount) return;
+
       toggle.addEventListener("click", ()=>{
         const open = box.classList.toggle("open");
         toggle.lastElementChild.textContent = open ? "hide" : "show";
-        messages.scrollTop = messages.scrollHeight;
+        scrollToBottom();
       });
 
       messages.appendChild(toggle);
       messages.appendChild(box);
-      messages.scrollTop = messages.scrollHeight;
+      scrollToBottom();
     }
 
     function ensureGreeting() {
@@ -474,7 +509,13 @@
         }
       } catch (e) {
         hideTyping();
-        addMessage("⚠️ I can’t reach the server right now. Is FastAPI running on port 8000?", "assistant");
+        addMessage(
+          "⚠️ I can’t reach the server right now.\n\n" +
+          "If you're using Cloudflare Quick Tunnel, open this once:\n" +
+          "widget.html?api=https://YOUR-TUNNEL.trycloudflare.com\n\n" +
+          "Or ensure FastAPI is running on 127.0.0.1:8000.",
+          "assistant"
+        );
       }
     }
 
@@ -487,7 +528,7 @@
       }
     });
 
-    // These buttons only hide the chat UI INSIDE the iframe (optional)
+    // Optional: hide UI inside iframe
     function hideWindowInsideIframe(){
       win.style.display = "none";
     }
