@@ -124,11 +124,11 @@
         <form class="form" onsubmit="return false;">
           <label>
             Name
-            <input type="text" placeholder="Max Mustermann" />
+            <input type="text" placeholder="Barshat K C" />
           </label>
           <label>
             E-Mail
-            <input type="email" placeholder="max@example.com" />
+            <input type="email" placeholder="barshat@example.com" />
           </label>
           <label>
             Nachricht
@@ -179,11 +179,26 @@
         fontSize: "20px",
         lineHeight: "1",
         boxShadow: "0 18px 50px rgba(2,6,23,.18)",
-        background: "linear-gradient(135deg, #bc1c53, #d62b67)",
+        background: "linear-gradient(135deg, #bc1c53, #d62b67)"
       });
 
       function normalizeBaseUrl(u) {
-        return String(u || "").trim().replace(/\/+$/, "");
+        if (!u) return "";
+        let url = String(u).trim();
+
+        if (!/^https?:\/\//i.test(url)) {
+          url = "https://" + url;
+        }
+
+        url = url.replace(/\/+$/, "");
+        url = url.replace(/\/chat$/i, "");
+
+        try {
+          const parsed = new URL(url);
+          return parsed.origin;
+        } catch {
+          return "";
+        }
       }
 
       // ✅ Read tunnel URL from:
@@ -193,10 +208,17 @@
       function getApiBase() {
         const params = new URLSearchParams(window.location.search);
         const apiFromUrl = params.get("api");
+
         if (apiFromUrl) {
           const base = normalizeBaseUrl(apiFromUrl);
-          if (base) localStorage.setItem(STORAGE_KEY, base);
-          return base;
+
+          if (base) {
+            localStorage.setItem(STORAGE_KEY, base);
+
+            // Remove ?api=... from visible browser URL after saving
+            window.history.replaceState({}, "", window.location.pathname);
+            return base;
+          }
         }
 
         const saved = normalizeBaseUrl(localStorage.getItem(STORAGE_KEY));
@@ -247,7 +269,7 @@
           boxShadow: "0 18px 50px rgba(2,6,23,.18)",
           opacity: "0",
           transition: "opacity 180ms ease",
-          pointerEvents: "none",
+          pointerEvents: "none"
         });
 
         if (isMobile) {
@@ -287,14 +309,16 @@
       });
 
       /******************************************************************
-       * ✅ How you use it (no code changes, no GitHub upload each time):
+       * ✅ How you use it:
        *
-       * When Cloudflare prints a new tunnel URL, open your site ONCE like:
+       * start.bat can still open:
        * https://barshat10.github.io/glwtest/?api=https://xxxxx.trycloudflare.com
        *
-       * This saves it in localStorage.
-       * After that, normal loads work:
+       * This page saves it in localStorage, then immediately rewrites
+       * the visible browser URL to:
        * https://barshat10.github.io/glwtest/
+       *
+       * After that, normal loads work until the tunnel changes again.
        ******************************************************************/
     })();
   </script>
