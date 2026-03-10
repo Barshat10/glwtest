@@ -1,88 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Service Request Form</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="service-form.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GLW Service Request</title>
+  <meta name="description" content="Service request form for GLW machines.">
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="service-form.css">
 </head>
-
 <body>
+  <header class="service-header">
+    <div class="service-header__inner">
+      <a class="service-back-link" href="index.html">← Back to Homepage</a>
+      <div class="service-brand">GLW Service</div>
+    </div>
+  </header>
 
-<div class="container">
+  <main class="service-page">
+    <section class="service-shell">
+      <div class="service-intro">
+        <h1>Machine Service Request</h1>
+        <p>
+          Please fill in the machine details below. After submission, the request
+          will be forwarded to our service email address.
+        </p>
+      </div>
 
-<h1>Machine Service / Warranty Request</h1>
+      <form
+        id="serviceForm"
+        class="service-form"
+        action="https://formsubmit.co/barshat10kc@gmail.com"
+        method="POST"
+      >
+        <input type="hidden" name="_subject" value="New GLW Service Request">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" value="https://barshat10.github.io/glwtest/service-form.html?success=1">
+        <input type="hidden" id="warrantyStatus" name="warranty_status" value="">
 
-<form id="serviceForm">
+        <section class="form-section">
+          <h2>Select Machine</h2>
+          <div class="machine-slider" role="radiogroup" aria-label="Machine selection">
+            <label class="machine-option">
+              <input type="radio" name="machine" value="PEC40" required>
+              <span class="machine-card">PEC40</span>
+            </label>
 
-<h2>Select Machine</h2>
+            <label class="machine-option">
+              <input type="radio" name="machine" value="MC25">
+              <span class="machine-card">MC25</span>
+            </label>
 
-<div class="machine-slider">
-  <label>
-    <input type="radio" name="machine" value="Machine A" required>
-    <span class="machine-card">Machine A</span>
-  </label>
+            <label class="machine-option">
+              <input type="radio" name="machine" value="PC65">
+              <span class="machine-card">PC65</span>
+            </label>
 
-  <label>
-    <input type="radio" name="machine" value="Machine B">
-    <span class="machine-card">Machine B</span>
-  </label>
+            <label class="machine-option">
+              <input type="radio" name="machine" value="CS60">
+              <span class="machine-card">CS60</span>
+            </label>
+          </div>
+        </section>
 
-  <label>
-    <input type="radio" name="machine" value="Machine C">
-    <span class="machine-card">Machine C</span>
-  </label>
-</div>
+        <section class="form-section">
+          <h2>Machine Information</h2>
 
-<h2>Machine Information</h2>
+          <div class="form-grid">
+            <label class="field">
+              <span>Serial Number *</span>
+              <input type="text" id="serial" name="serial" placeholder="Enter serial number" required>
+            </label>
 
-<label>Serial Number *</label>
-<input type="text" name="serial" required>
+            <label class="field">
+              <span>Year of Manufacture *</span>
+              <input type="number" id="year" name="year" min="1900" max="2099" placeholder="e.g. 2019" required>
+            </label>
+          </div>
 
-<label>Year of Manufacture *</label>
-<input type="number" name="year" id="year" required>
+          <p id="warrantyMessage" class="warranty-message" aria-live="polite"></p>
 
-<p id="warrantyMessage"></p>
+          <div id="warrantyQuestions" class="warranty-questions">
+            <div class="form-grid">
+              <label class="field">
+                <span>Machine Type</span>
+                <select id="machineType" name="machineType">
+                  <option value="">Select type</option>
+                  <option value="Crimping">Crimping</option>
+                  <option value="Stripping">Stripping</option>
+                  <option value="Crimping and Stripping">Crimping and Stripping</option>
+                  <option value="Cutting">Cutting</option>
+                  <option value="Ferrules">Ferrules</option>
+                </select>
+              </label>
 
-<label>Machine Type</label>
-<select name="machineType">
-<option value="">Select type</option>
-<option>Type A</option>
-<option>Type B</option>
-<option>Type C</option>
-</select>
+              <label class="field">
+                <span>Last Repair</span>
+                <input type="text" id="lastRepair" name="lastRepair" placeholder="e.g. 2024-11 or 15.01.2025">
+              </label>
+            </div>
 
-<label>Last Repair</label>
-<input type="text" name="lastRepair">
+            <div id="meterReadingSection">
+              <label class="field">
+                <span>Meter Reading</span>
+                <input type="number" id="meter" name="meter" min="0" placeholder="Optional">
+              </label>
+            </div>
+          </div>
 
-<div id="meterReadingSection">
-<label>Meter Reading</label>
-<input type="number" name="meter">
-</div>
+          <label class="field">
+            <span>Upload Images (optional, not active yet)</span>
+            <input type="file" id="images" name="images" multiple disabled>
+            <small class="field-hint">This field is shown for later use, but it is currently inactive.</small>
+          </label>
+        </section>
 
-<label>Upload Images (optional)</label>
-<input type="file" name="images" multiple>
+        <section class="form-section">
+          <h2>Contact Information</h2>
 
-<h2>Contact Information</h2>
+          <div class="form-grid">
+            <label class="field">
+              <span>Email</span>
+              <input type="email" id="email" name="email" placeholder="yourname@example.com">
+            </label>
 
-<label>Email</label>
-<input type="email" name="email">
+            <label class="field">
+              <span>Phone</span>
+              <input type="text" id="phone" name="phone" placeholder="+49 ...">
+            </label>
+          </div>
 
-<label>Phone</label>
-<input type="text" name="phone">
+          <label class="field">
+            <span>Additional Notes</span>
+            <textarea id="notes" name="notes" rows="5" placeholder="Describe the issue or add more details"></textarea>
+          </label>
+        </section>
 
-<label>Additional Notes</label>
-<textarea name="notes"></textarea>
+        <div class="form-actions">
+          <button type="submit" class="submit-btn">Submit Request</button>
+          <p id="formStatus" class="form-status" aria-live="polite"></p>
+        </div>
+      </form>
+    </section>
+  </main>
 
-<button type="submit">Submit Request</button>
-
-</form>
-
-<p id="formStatus"></p>
-
-</div>
-
-<script src="service-form.js"></script>
-
+  <script src="service-form.js"></script>
 </body>
 </html>

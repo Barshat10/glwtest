@@ -1,73 +1,242 @@
-body{
-font-family: Arial, sans-serif;
-background:#f5f5f5;
+body {
+  font-family: Arial, sans-serif;
+  background: #bc1c53;
+  color: #1f2937;
+  margin: 0;
 }
 
-.container{
-max-width:700px;
-margin:auto;
-padding:30px;
-background:white;
-border-radius:10px;
+.service-header {
+  padding: 20px 16px 0;
 }
 
-h1{
-text-align:center;
-margin-bottom:20px;
+.service-header__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
-form label{
-display:block;
-margin-top:15px;
+.service-back-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
 }
 
-input,select,textarea{
-width:100%;
-padding:8px;
-margin-top:5px;
-border:1px solid #ccc;
-border-radius:5px;
+.service-back-link:hover {
+  text-decoration: underline;
 }
 
-button{
-margin-top:20px;
-padding:12px;
-background:#0077cc;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
+.service-brand {
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
 
-button:hover{
-background:#005fa3;
+.service-page {
+  padding: 20px 16px 40px;
 }
 
-.machine-slider{
-display:flex;
-gap:10px;
-margin-top:10px;
+.service-shell {
+  max-width: 960px;
+  margin: 0 auto;
+  background: #d1d6d3;
+  border-radius: 16px;
+  box-shadow: 0 18px 50px rgba(2, 6, 23, 0.12);
+  overflow: hidden;
 }
 
-.machine-card{
-display:inline-block;
-padding:15px;
-border:2px solid #ccc;
-border-radius:8px;
-cursor:pointer;
-background:#fafafa;
+.service-intro {
+  padding: 28px 28px 12px;
+  background: linear-gradient(135deg, rgba(188, 28, 83, 0.08), rgba(255, 255, 255, 0.55));
 }
 
-.machine-slider input{
-display:none;
+.service-intro h1 {
+  margin: 0 0 10px;
+  font-size: 2rem;
 }
 
-.machine-slider input:checked + .machine-card{
-border-color:#0077cc;
-background:#e6f2ff;
+.service-intro p {
+  margin: 0;
+  line-height: 1.6;
 }
 
-#warrantyMessage{
-margin-top:10px;
-font-weight:bold;
+.service-form {
+  padding: 12px 28px 28px;
+}
+
+.form-section + .form-section {
+  margin-top: 28px;
+}
+
+.form-section h2 {
+  margin: 0 0 16px;
+  font-size: 1.25rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.field span {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  margin-top: 0;
+  border: 1px solid #c7ccd1;
+  border-radius: 10px;
+  background: #ffffff;
+  font: inherit;
+  color: #111827;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #bc1c53;
+  box-shadow: 0 0 0 3px rgba(188, 28, 83, 0.12);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.field-hint {
+  display: block;
+  margin-top: 8px;
+  color: #4b5563;
+  font-size: 0.9rem;
+}
+
+.machine-slider {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.machine-option input {
+  display: none;
+}
+
+.machine-card {
+  display: inline-block;
+  min-width: 110px;
+  padding: 14px 18px;
+  border: 2px solid #c7ccd1;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #fafafa;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.18s ease;
+}
+
+.machine-option input:checked + .machine-card {
+  border-color: #0077cc;
+  background: #e6f2ff;
+  transform: translateY(-1px);
+}
+
+.machine-card:hover {
+  border-color: #8aa8c2;
+}
+
+.warranty-message {
+  margin: 6px 0 18px;
+  font-weight: 700;
+  min-height: 24px;
+}
+
+.warranty-message--ok {
+  color: #0f7b35;
+}
+
+.warranty-message--old {
+  color: #b42318;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.form-actions {
+  margin-top: 28px;
+}
+
+.submit-btn {
+  display: inline-block;
+  margin-top: 0;
+  padding: 13px 20px;
+  background: #0077cc;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.submit-btn:hover {
+  background: #005fa3;
+  transform: translateY(-1px);
+}
+
+.form-status {
+  margin-top: 14px;
+  font-weight: 600;
+  min-height: 24px;
+}
+
+.form-status--success {
+  color: #0f7b35;
+}
+
+.form-status--error {
+  color: #b42318;
+}
+
+@media (max-width: 700px) {
+  .service-header__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .service-intro,
+  .service-form {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .service-intro h1 {
+    font-size: 1.6rem;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .machine-card {
+    min-width: 96px;
+    padding: 12px 14px;
+  }
 }
