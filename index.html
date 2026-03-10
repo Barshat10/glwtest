@@ -25,6 +25,7 @@
         <a href="#produkte">Produkte</a>
         <a href="#services">Services</a>
         <a href="#kontakt">Kontakt</a>
+        <a href="service-form.html">Service Formular</a>
       </nav>
     </div>
   </header>
@@ -42,6 +43,7 @@
           <div class="hero__actions">
             <a class="btn btn--primary" href="#kontakt">Kontakt</a>
             <a class="btn btn--ghost" href="#services">Mehr erfahren</a>
+            <a class="btn btn--primary" href="service-form.html">Service Formular</a>
           </div>
 
           <div class="info-cards">
@@ -115,6 +117,10 @@
             <p>Welche Lösung passt zu welchem Kabeltyp?</p>
           </div>
         </div>
+
+        <div style="margin-top: 24px; text-align: center;">
+          <a class="btn btn--primary" href="service-form.html">Zum Service Formular</a>
+        </div>
       </div>
     </section>
 
@@ -137,6 +143,11 @@
           <button class="btn btn--primary" type="submit" id="fakeSubmit">Senden (Demo)</button>
           <p class="form__hint">Formular ist nur Demo — ideal zum Testen von Overlays/z-index.</p>
         </form>
+
+        <div style="margin-top: 24px;">
+          <p><strong>Oder nutze direkt unser Service Formular:</strong></p>
+          <a class="btn btn--ghost" href="service-form.html">Service Formular öffnen</a>
+        </div>
       </div>
     </section>
   </main>
@@ -153,7 +164,7 @@
 
   <script src="app.js"></script>
 
-  <!-- ✅ Chatbot launcher -->
+  <!-- Chatbot launcher -->
   <button id="glw-chat-launcher" aria-label="Open help chat">💬</button>
 
   <script>
@@ -164,7 +175,6 @@
 
       const btn = document.getElementById(BTN_ID);
 
-      // Style the floating button
       Object.assign(btn.style, {
         position: "fixed",
         right: "22px",
@@ -201,10 +211,6 @@
         }
       }
 
-      // ✅ Read tunnel URL from:
-      // 1) ?api=https://xxxxx.trycloudflare.com   (sets localStorage)
-      // 2) localStorage (persists across reloads)
-      // 3) fallback local FastAPI
       function getApiBase() {
         const params = new URLSearchParams(window.location.search);
         const apiFromUrl = params.get("api");
@@ -214,8 +220,6 @@
 
           if (base) {
             localStorage.setItem(STORAGE_KEY, base);
-
-            // Remove ?api=... from visible browser URL after saving
             window.history.replaceState({}, "", window.location.pathname);
             return base;
           }
@@ -229,15 +233,9 @@
 
       const apiBase = getApiBase();
 
-      // Optional helper: show current API base in console
       console.log("[GLW HelpBot] API base:", apiBase);
 
       function buildWidgetSrc() {
-        // ✅ IMPORTANT for GitHub Pages project sites:
-        // Use a relative path so it works at /glwtest/ (and locally).
-        //
-        // Pass apiBase to widget only if it's not local,
-        // so local dev keeps a clean URL.
         const base = normalizeBaseUrl(apiBase);
         const isLocal = base.startsWith("http://127.0.0.1") || base.startsWith("http://localhost");
 
@@ -303,23 +301,9 @@
 
       btn.addEventListener("click", toggleChat);
 
-      // Optional: close when ESC pressed
       window.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeChat();
       });
-
-      /******************************************************************
-       * ✅ How you use it:
-       *
-       * start.bat can still open:
-       * https://barshat10.github.io/glwtest/?api=https://xxxxx.trycloudflare.com
-       *
-       * This page saves it in localStorage, then immediately rewrites
-       * the visible browser URL to:
-       * https://barshat10.github.io/glwtest/
-       *
-       * After that, normal loads work until the tunnel changes again.
-       ******************************************************************/
     })();
   </script>
 </body>

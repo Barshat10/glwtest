@@ -1,0 +1,73 @@
+body{
+font-family: Arial, sans-serif;
+background:#f5f5f5;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+padding:30px;
+background:white;
+border-radius:10px;
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+}
+
+form label{
+display:block;
+margin-top:15px;
+}
+
+input,select,textarea{
+width:100%;
+padding:8px;
+margin-top:5px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+margin-top:20px;
+padding:12px;
+background:#0077cc;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#005fa3;
+}
+
+.machine-slider{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.machine-card{
+display:inline-block;
+padding:15px;
+border:2px solid #ccc;
+border-radius:8px;
+cursor:pointer;
+background:#fafafa;
+}
+
+.machine-slider input{
+display:none;
+}
+
+.machine-slider input:checked + .machine-card{
+border-color:#0077cc;
+background:#e6f2ff;
+}
+
+#warrantyMessage{
+margin-top:10px;
+font-weight:bold;
+}

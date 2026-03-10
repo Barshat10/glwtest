@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Service Request Form</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="service-form.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Machine Service / Warranty Request</h1>
+
+<form id="serviceForm">
+
+<h2>Select Machine</h2>
+
+<div class="machine-slider">
+  <label>
+    <input type="radio" name="machine" value="Machine A" required>
+    <span class="machine-card">Machine A</span>
+  </label>
+
+  <label>
+    <input type="radio" name="machine" value="Machine B">
+    <span class="machine-card">Machine B</span>
+  </label>
+
+  <label>
+    <input type="radio" name="machine" value="Machine C">
+    <span class="machine-card">Machine C</span>
+  </label>
+</div>
+
+<h2>Machine Information</h2>
+
+<label>Serial Number *</label>
+<input type="text" name="serial" required>
+
+<label>Year of Manufacture *</label>
+<input type="number" name="year" id="year" required>
+
+<p id="warrantyMessage"></p>
+
+<label>Machine Type</label>
+<select name="machineType">
+<option value="">Select type</option>
+<option>Type A</option>
+<option>Type B</option>
+<option>Type C</option>
+</select>
+
+<label>Last Repair</label>
+<input type="text" name="lastRepair">
+
+<div id="meterReadingSection">
+<label>Meter Reading</label>
+<input type="number" name="meter">
+</div>
+
+<label>Upload Images (optional)</label>
+<input type="file" name="images" multiple>
+
+<h2>Contact Information</h2>
+
+<label>Email</label>
+<input type="email" name="email">
+
+<label>Phone</label>
+<input type="text" name="phone">
+
+<label>Additional Notes</label>
+<textarea name="notes"></textarea>
+
+<button type="submit">Submit Request</button>
+
+</form>
+
+<p id="formStatus"></p>
+
+</div>
+
+<script src="service-form.js"></script>
+
+</body>
+</html>
